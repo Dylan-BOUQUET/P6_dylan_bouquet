@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const Thing = require('../models/thing');
+const Thing = require('../models/sauce');
 
 router.post('/', (req, res, next) => {
     const thing = new Thing({

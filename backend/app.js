@@ -2,9 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const stuffRoutes = require('./routes/stuff');
+const stuffRoutes = require('./routes/sauce');
 
-mongoose.connect('mongosh "mongodb+srv://api-secure-cluster.2w8uz.mongodb.net/Api-Secure-Cluster"',
+mongoose.connect("mongodb+srv://api-secure-cluster.2w8uz.mongodb.net/myFirstDatabase",
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
@@ -26,6 +26,6 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 
-app.use('/api/stuff', stuffRoutes);
+app.use('/api/sauce', sauceRoutes);
 
 module.exports = app;

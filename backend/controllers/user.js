@@ -1,45 +1,43 @@
-const bcrypt = require("bcrypt"); // Packaqge de cryptage pour les mots de passe)
+const bcrypt = require("bcrypt");//Package de cryptage pour les mots de passe
+const jwt = require("jsonwebtoken");
 
-const jwt = require("jsonwebtioken");
-const user = require("../models/user");
+const User = require("../models/User");
 
-const user = require("../models/user");
-
-exports.signup = (req, res, next) => { // Fonction qui permet de créer de nouveaux utilisateurs dans la base de donées
-    bcrypt.hash(req.body.password, 10) // Cryptage et hachage du mot de passe avec 10 tours
-        .then(hash => {
-            const user = new user({ // Création Nouveau utilisateur
+exports.signup = (req, res, next) => {//Fonction signup pour création de nouveaux users dans la base de données
+    bcrypt.hash(req.body.password, 10)//Cryptage/hachage du mot de passe avec 10 tours
+        .then(hash => { 
+            const user = new User({//Création nouveau user
                 email: req.body.email,
-                password: Hash
+                password: hash
             });
-            user.save() // Enregistrement du user dans la base de donées
-                .then(() => res.status(201).json({message: "Utilisateur crée !"}))
+            user.save()//Enregistrement du user dans la base de données
+                .then(() => res.status(201).json({message: "Utilisateur créé !"}))
                 .catch(error => res.status(400).json({error}));
         })
-        .cactch(error => res.status(500).json({error}));
+        .catch(error => res.status(500).json({error}));
 };
 
-exports.login = (req, res, next) => { //Fonction qui permet à l'utilisateur existant de se connecter
-user.findOne({email: req.body.email})
-    .then(user =>  {
-        if (!user) {
-            return res.status(401).json({error: "Utilisateur non trouvé"});
-        }
-        bcrypt.compare(req.body.password, user.password) // Comparaison du mot de passe avec brcypt et la fonction compare
-            .then(valid => {
-                if (!valid) {
-                    return res.status(401).json({error: "Mot de passe incorrect"})
-                }
-                res.status(200).json({ // Requête OK
-                    userId: user._id,
-                    token: jwt.sign(
-                        {userId: user._id},
-                        "RANDOM_TOKEN_SECRET",
-                        {expiresIn: "24h"}
-                    )
-                });
-            })
-            .catch(error => res.status(500).json({error})); // Erreur serveur
+exports.login = (req, res, next) => {//Fonction login pour connecter des users existants
+    User.findOne({email: req.body.email})
+        .then(user => {
+            if (!user) {
+                return res.status(401).json({error: "Utilisateur non trouvé !"});   
+            }
+            bcrypt.compare(req.body.password, user.password)//Comparaison du mot de passe avec bcrypt et la fonction compare
+                .then(valid => {
+                    if (!valid) {
+                        return res.status(401).json({error: "Mot de passe incorrect !"})
+                    }
+                    res.status(200).json({//Requête OK 
+                        userId: user._id,
+                        token: jwt.sign(
+                            {userId: user._id},
+                            "RANDOM_TOKEN_SECRET",
+                            {expiresIn: "24h"}
+                        )
+                    });
+                })
+                .catch(error => res.status(500).json({error}));//Erreur serveur
         })
-        .catch(error => res.status(500).json({error})); // Erreur serveur
-    };
+        .catch(error => res.status(500).json({error}));//Erreur serveur
+};

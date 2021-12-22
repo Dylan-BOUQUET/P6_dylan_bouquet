@@ -8,13 +8,13 @@ const userRoutes = require("./routes/user");
 const sauceRoutes = require("./routes/sauce");
 
 // Logique de connexion à MongoDB //
-mongoose.connect("mongodb+srv://cluster1.example.mongodb.net api-secure-cluster",
+mongoose.connect("mongodb+srv://dylan:dylan@api-secure-cluster.2w8uz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
   .then(() => console.log('Connexion à MongoDB réussie !'))
-  .catch(() => console.log('Connexion à MongoDB échouée !'));
+  .catch((error) => console.log(error));
 
 const app = express();
 
